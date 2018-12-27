@@ -1,27 +1,30 @@
-﻿using KimiNoGakko.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using KimiNoGakko.Models;
 
 namespace KimiNoGakko.Controllers
 {
-    public class StudentsController : Controller
+    public class InstructorsController : Controller
     {
         private readonly SchoolContext _context;
 
-        public StudentsController(SchoolContext context)
+        public InstructorsController(SchoolContext context)
         {
             _context = context;
         }
 
-        // GET: Students
+        // GET: Instructors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Students.ToListAsync());
+            return View(await _context.Instructors.ToListAsync());
         }
 
-        // GET: Students/Details/5
+        // GET: Instructors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -29,39 +32,39 @@ namespace KimiNoGakko.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students
+            var instructor = await _context.Instructors
                 .SingleOrDefaultAsync(m => m.ID == id);
-            if (student == null)
+            if (instructor == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(instructor);
         }
 
-        // GET: Students/Create
+        // GET: Instructors/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Students/Create
+        // POST: Instructors/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GudrdianPhoneNumber,ID,FirstMidName,LastName,BirthDate,Pesel")] Student student)
+        public async Task<IActionResult> Create([Bind("HireDate,ID,FirstMidName,LastName,BirthDate,Pesel")] Instructor instructor)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(student);
+                _context.Add(instructor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            return View(instructor);
         }
 
-        // GET: Students/Edit/5
+        // GET: Instructors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -69,22 +72,22 @@ namespace KimiNoGakko.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.SingleOrDefaultAsync(m => m.ID == id);
-            if (student == null)
+            var instructor = await _context.Instructors.SingleOrDefaultAsync(m => m.ID == id);
+            if (instructor == null)
             {
                 return NotFound();
             }
-            return View(student);
+            return View(instructor);
         }
 
-        // POST: Students/Edit/5
+        // POST: Instructors/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GudrdianPhoneNumber,ID,FirstMidName,LastName,BirthDate,Pesel")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("HireDate,ID,FirstMidName,LastName,BirthDate,Pesel")] Instructor instructor)
         {
-            if (id != student.ID)
+            if (id != instructor.ID)
             {
                 return NotFound();
             }
@@ -93,12 +96,12 @@ namespace KimiNoGakko.Controllers
             {
                 try
                 {
-                    _context.Update(student);
+                    _context.Update(instructor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StudentExists(student.ID))
+                    if (!InstructorExists(instructor.ID))
                     {
                         return NotFound();
                     }
@@ -109,10 +112,10 @@ namespace KimiNoGakko.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            return View(instructor);
         }
 
-        // GET: Students/Delete/5
+        // GET: Instructors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -120,30 +123,30 @@ namespace KimiNoGakko.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students
+            var instructor = await _context.Instructors
                 .SingleOrDefaultAsync(m => m.ID == id);
-            if (student == null)
+            if (instructor == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(instructor);
         }
 
-        // POST: Students/Delete/5
+        // POST: Instructors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var student = await _context.Students.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Students.Remove(student);
+            var instructor = await _context.Instructors.SingleOrDefaultAsync(m => m.ID == id);
+            _context.Instructors.Remove(instructor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StudentExists(int id)
+        private bool InstructorExists(int id)
         {
-            return _context.Students.Any(e => e.ID == id);
+            return _context.Instructors.Any(e => e.ID == id);
         }
     }
 }
