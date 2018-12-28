@@ -1,4 +1,4 @@
-﻿@model KimiNoGakko.Models.Student
+﻿@model StudentClassVM
 
 @{
     ViewData["Title"] = "Details";
@@ -9,40 +9,71 @@
 <div>
     <h4>Student</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstMidName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.FirstMidName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.BirthDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Pesel)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Pesel)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.GudrdianPhoneNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.GudrdianPhoneNumber)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="row">
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Student.FirstMidName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Student.FirstMidName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Student.LastName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Student.LastName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Student.BirthDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Student.BirthDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Student.Pesel)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Student.Pesel)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Student.GudrdianPhoneNumber)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Student.GudrdianPhoneNumber)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Student.Class.Name)
+                </dt>
+                <dd>
+                    @if (@Model.Student.ClassID != 1)
+                    {
+                        <a asp-controller="Classes" asp-action="Details" asp-route-id="@Model.Student.ClassID">@Html.DisplayFor(model => model.Student.Class.FullName)</a>
+                    }
+                    else
+                    {
+                        <text>(nieprzypisany)</text>
+                    }
+                </dd>
+            </dl>
+            <div class="text-center">
+                <a asp-action="Edit" asp-route-id="@Model.Student.ID">Edit</a> |
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+
+        <div class="col-md-offset-2 col-md-6">
+            <form asp-action="AssignToClass" method="post" asp-route-id="@Model.Student.ID">
+                <div class="form-group">
+                    <label class="control-label" asp-for="Student.Class.Name"></label>
+                    @Html.DropDownListFor(x => x.Student.ClassID,
+                        new SelectList(Model.Classes, "ClassID", "FullName"), new { @class = "form-control" }
+                        )
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Zapisz" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

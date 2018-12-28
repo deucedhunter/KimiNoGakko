@@ -1,4 +1,4 @@
-﻿@model KimiNoGakko.Models.Student
+﻿@model StudentClassVM
 
 @{
     ViewData["Title"] = "Create";
@@ -14,31 +14,36 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="FirstMidName" class="control-label"></label>
-                <input asp-for="FirstMidName" class="form-control" />
-                <span asp-validation-for="FirstMidName" class="text-danger"></span>
+                <label asp-for="Student.FirstMidName" class="control-label"></label>
+                <input asp-for="Student.FirstMidName" class="form-control" />
+                <span asp-validation-for="Student.FirstMidName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <label asp-for="Student.LastName" class="control-label"></label>
+                <input asp-for="Student.LastName" class="form-control" />
+                <span asp-validation-for="Student.LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" />
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                <label asp-for="Student.BirthDate" class="control-label"></label>
+                <input asp-for="Student.BirthDate" class="form-control" />
+                <span asp-validation-for="Student.BirthDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Pesel" class="control-label"></label>
-                <input asp-for="Pesel" class="form-control" />
-                <span asp-validation-for="Pesel" class="text-danger"></span>
+                <label asp-for="Student.Pesel" class="control-label"></label>
+                <input asp-for="Student.Pesel" class="form-control" />
+                <span asp-validation-for="Student.Pesel" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GudrdianPhoneNumber" class="control-label"></label>
-                <input asp-for="GudrdianPhoneNumber" class="form-control" />
-                <span asp-validation-for="GudrdianPhoneNumber" class="text-danger"></span>
+                <label asp-for="Student.GudrdianPhoneNumber" class="control-label"></label>
+                <input asp-for="Student.GudrdianPhoneNumber" class="form-control" />
+                <span asp-validation-for="Student.GudrdianPhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
+                @Html.DropDownListFor(x => x.Student.ClassID,
+                    new SelectList(Model.Classes, "ClassID", "FullName"), "Wybierz"
+                    )
+            </div>
+            <div class=" form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>

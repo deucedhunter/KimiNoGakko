@@ -11,8 +11,8 @@ using System;
 namespace KimiNoGakko.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20181227155113_addInctructor")]
-    partial class addInctructor
+    [Migration("20181228143827_extendLengthOfClassName")]
+    partial class extendLengthOfClassName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,21 @@ namespace KimiNoGakko.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("KimiNoGakko.Models.Class", b =>
+                {
+                    b.Property<int>("ClassID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(5);
+
+                    b.Property<int>("Year");
+
+                    b.HasKey("ClassID");
+
+                    b.ToTable("Classes");
+                });
 
             modelBuilder.Entity("KimiNoGakko.Models.Instructor", b =>
                 {
@@ -43,7 +58,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Instructor");
+                    b.ToTable("Instructors");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Student", b =>
@@ -52,6 +67,8 @@ namespace KimiNoGakko.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("BirthDate");
+
+                    b.Property<int>("ClassID");
 
                     b.Property<string>("FirstMidName")
                         .IsRequired()
@@ -68,7 +85,17 @@ namespace KimiNoGakko.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Student");
+                    b.HasIndex("ClassID");
+
+                    b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("KimiNoGakko.Models.Student", b =>
+                {
+                    b.HasOne("KimiNoGakko.Models.Class", "Class")
+                        .WithMany("Students")
+                        .HasForeignKey("ClassID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

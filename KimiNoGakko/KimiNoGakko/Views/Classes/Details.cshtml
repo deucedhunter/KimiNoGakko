@@ -1,0 +1,75 @@
+﻿@model KimiNoGakko.Models.Class
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Class</h4>
+    <hr />
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Year)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Year)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt>
+                        Count
+                    </dt>
+                    <dd>
+
+                        @if (Model.Students.Count() > 0)
+                        {
+                            <text>@Model.Students.Count()</text>
+                        }
+                        else
+                        {
+                            <text>(brak)</text>
+                        }
+                    </dd>
+                </dl>
+                <div class="text-center">
+                    <a asp-action="Edit" asp-route-id="@Model.ClassID">Edit</a> |
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th width="85%">Imie</th>
+                            <th>Usuń z klasy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Students)
+                        {
+                            <tr>
+                                <th><a asp-controller="Students" asp-action="Details" asp-route-id="@item.ID">@item.FullName</a></th>
+                                <th class="text-center">
+                                    <a asp-action="DeleteStudent" asp-route-id="@item.ID"><i class="fas fa-user-slash" style="color: red;"></i></a>
+                                </th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

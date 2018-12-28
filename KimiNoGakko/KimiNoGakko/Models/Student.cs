@@ -6,5 +6,9 @@ namespace KimiNoGakko.Models
     {
         [Display(Name = "Numer opiekuna")]
         public string GudrdianPhoneNumber { get; set; }
+
+        public int ClassID { get; set; }
+        public Class Class { get; set; }
+
     }
 }
