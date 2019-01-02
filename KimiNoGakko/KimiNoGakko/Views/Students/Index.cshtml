@@ -53,7 +53,7 @@
                     @Html.DisplayFor(modelItem => item.GudrdianPhoneNumber)
                 </td>
                 <td>
-                    @if (item.ClassID != 1)
+                    @if (item.ClassID != 0)
                     {
                         <a asp-controller="Classes" asp-action="Details" asp-route-id="@item.ClassID">@Html.DisplayFor(model => item.Class.FullName)</a>
                     }

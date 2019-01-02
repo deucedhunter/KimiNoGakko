@@ -46,7 +46,7 @@
                     @Html.DisplayNameFor(model => model.Student.Class.Name)
                 </dt>
                 <dd>
-                    @if (@Model.Student.ClassID != 1)
+                    @if (@Model.Student.ClassID != 0)
                     {
                         <a asp-controller="Classes" asp-action="Details" asp-route-id="@Model.Student.ClassID">@Html.DisplayFor(model => model.Student.Class.FullName)</a>
                     }

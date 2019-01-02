@@ -40,7 +40,7 @@
             </div>
             <div class="form-group">
                 @Html.DropDownListFor(x => x.Student.ClassID,
-                    new SelectList(Model.Classes, "ClassID", "FullName"), "Wybierz"
+                    new SelectList(Model.Classes, "ClassID", "FullName"), "Wybierz", new { @class = "form-control"}
                     )
             </div>
             <div class=" form-group">

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace KimiNoGakko.Models
 {
@@ -17,12 +18,24 @@ namespace KimiNoGakko.Models
         public DbSet<Enrollment> Enrollments { get; set; }
 
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
             modelBuilder.Entity<Class>()
                 .HasMany(c => c.Students)
                 .WithOne(e => e.Class);
+
+
+            modelBuilder.Entity<Course>()
+                .HasOne<Enrollment>(a => a.Enrollment)
+                .WithOne(b => b.Course)
+                .HasForeignKey<Enrollment>(b => b.CourseID);
+
+            modelBuilder.Entity<Enrollment>()
+                .HasIndex(e => e.CourseID)
+                .IsUnique(false);
+
         }
 
     }

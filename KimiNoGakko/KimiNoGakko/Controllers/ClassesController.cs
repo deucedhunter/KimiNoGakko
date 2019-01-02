@@ -1,4 +1,5 @@
 ﻿using KimiNoGakko.Models;
+using KimiNoGakko.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -32,12 +33,23 @@ namespace KimiNoGakko.Controllers
             var @class = await _context.Classes
                 .Include(c => c.Students)
                 .SingleOrDefaultAsync(m => m.ClassID == id);
+
             if (@class == null)
             {
                 return NotFound();
             }
 
-            return View(@class);
+            var vm = new ClassDetailsVM
+            {
+                Class = @class,
+                Enrollments = await _context.Enrollments
+                    .Where(x => x.ClassID == @class.ClassID)
+                    .Include(x => x.Course)
+                    .ToListAsync()
+            };
+            //ViewData["CourseItems"] = new SelectList(_context.Courses, "ID", "FullName", );
+
+            return View(vm);
         }
 
         // GET: Classes/Create

@@ -11,8 +11,8 @@ using System;
 namespace KimiNoGakko.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20181228161102_Add3NewTables")]
-    partial class Add3NewTables
+    [Migration("20181230115818_CourseTableKeyChanges")]
+    partial class CourseTableKeyChanges
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,10 +38,8 @@ namespace KimiNoGakko.Migrations
 
             modelBuilder.Entity("KimiNoGakko.Models.Course", b =>
                 {
-                    b.Property<int>("EnrollmentID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CourseID");
 
                     b.Property<int>("InstructorID");
 
@@ -49,7 +47,7 @@ namespace KimiNoGakko.Migrations
 
                     b.Property<int>("SubjectID");
 
-                    b.HasKey("EnrollmentID");
+                    b.HasKey("ID");
 
                     b.HasIndex("InstructorID");
 
@@ -60,14 +58,14 @@ namespace KimiNoGakko.Migrations
 
             modelBuilder.Entity("KimiNoGakko.Models.Enrollment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("ClassID");
 
                     b.Property<int>("CourseID");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.HasIndex("ClassID");
 

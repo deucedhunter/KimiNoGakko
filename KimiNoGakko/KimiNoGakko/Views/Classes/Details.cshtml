@@ -1,4 +1,4 @@
-﻿@model KimiNoGakko.Models.Class
+﻿@model ClassDetailsVM
 
 @{
     ViewData["Title"] = "Details";
@@ -12,28 +12,28 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <dl class="dl-horizontal">
                     <dt>
-                        @Html.DisplayNameFor(model => model.Year)
+                        @Html.DisplayNameFor(model => Model.Class.Year)
                     </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.Year)
+                        @Html.DisplayFor(model => Model.Class.Year)
                     </dd>
                     <dt>
-                        @Html.DisplayNameFor(model => model.Name)
+                        @Html.DisplayNameFor(model => Model.Class.Name)
                     </dt>
                     <dd>
-                        @Html.DisplayFor(model => model.Name)
+                        @Html.DisplayFor(model => Model.Class.Name)
                     </dd>
                     <dt>
                         Count
                     </dt>
                     <dd>
 
-                        @if (Model.Students.Count() > 0)
+                        @if (Model.Class.Students.Count() > 0)
                         {
-                            <text>@Model.Students.Count()</text>
+                            <text>@Model.Class.Students.Count()</text>
                         }
                         else
                         {
@@ -42,25 +42,68 @@
                     </dd>
                 </dl>
                 <div class="text-center">
-                    <a asp-action="Edit" asp-route-id="@Model.ClassID">Edit</a> |
+                    <a asp-action="Edit" asp-route-id="@Model.Class.ClassID">Edit</a> |
                     <a asp-action="Index">Back to List</a>
                 </div>
+
+
+                @*<div class="well well-lg" style="width: 18rem;">
+                        <div class="card-body">
+                            <form asp-action="">
+
+                                <div class="form-group">
+                                    <label asp-for="ClassID" class="control-label"></label>
+                                    <select asp-for="ClassID" asp-items="@ViewBag.ClassItems" class="form-control" />
+
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Zapisz" class="btn btn-default" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>*@
+
             </div>
 
-            <div class="col-md-8">
-                <table class="table">
+
+            <div class="col-md-7">
+
+
+
+                <table class="well table">
                     <thead>
                         <tr>
-                            <th width="85%">Imie</th>
-                            <th>Usuń z klasy</th>
+                            <th>Kursy</th>
+                            <th style="text-align: right;">Usuń z klasy</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Students)
+                        @foreach (var item in Model.Enrollments)
+                        {
+                            <tr>
+                                <th><a asp-controller="Enrollments" asp-action="Details" asp-route-id="@item.ID">@item.Course.Name</a></th>
+                                <th class="text-center" style="text-align: right;">
+                                    <a asp-controller="Enrollments" asp-action="Delete" asp-route-id="@item.ID"><i class="fas fa-sign-out-alt" style="color: red;"></i></a>
+                                </th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+                <table class="well table">
+                    <thead>
+                        <tr>
+                            <th>Uczniowie</th>
+                            <th style="text-align: right;">Usuń z klasy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Class.Students)
                         {
                             <tr>
                                 <th><a asp-controller="Students" asp-action="Details" asp-route-id="@item.ID">@item.FullName</a></th>
-                                <th class="text-center">
+                                <th class="text-center" style="text-align: right;">
                                     <a asp-action="DeleteStudent" asp-route-id="@item.ID"><i class="fas fa-user-slash" style="color: red;"></i></a>
                                 </th>
                             </tr>

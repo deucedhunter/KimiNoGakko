@@ -5,10 +5,41 @@ using System.Collections.Generic;
 
 namespace KimiNoGakko.Migrations
 {
-    public partial class Add3NewTables : Migration
+    public partial class Inital : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Classes",
+                columns: table => new
+                {
+                    ClassID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(maxLength: 5, nullable: true),
+                    Year = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Classes", x => x.ClassID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Instructors",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BirthDate = table.Column<DateTime>(nullable: false),
+                    FirstMidName = table.Column<string>(maxLength: 60, nullable: false),
+                    HireDate = table.Column<DateTime>(nullable: false),
+                    LastName = table.Column<string>(maxLength: 30, nullable: false),
+                    Pesel = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Instructors", x => x.ID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Subjects",
                 columns: table => new
@@ -24,19 +55,43 @@ namespace KimiNoGakko.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BirthDate = table.Column<DateTime>(nullable: false),
+                    ClassID = table.Column<int>(nullable: false),
+                    FirstMidName = table.Column<string>(maxLength: 60, nullable: false),
+                    GudrdianPhoneNumber = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(maxLength: 30, nullable: false),
+                    Pesel = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Students_Classes_ClassID",
+                        column: x => x.ClassID,
+                        principalTable: "Classes",
+                        principalColumn: "ClassID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
-                    EnrollmentID = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CourseID = table.Column<int>(nullable: false),
+                    EnrollmentID = table.Column<int>(nullable: false),
                     InstructorID = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     SubjectID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.EnrollmentID);
+                    table.PrimaryKey("PK_Courses", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Courses_Instructors_InstructorID",
                         column: x => x.InstructorID,
@@ -55,14 +110,14 @@ namespace KimiNoGakko.Migrations
                 name: "Enrollments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClassID = table.Column<int>(nullable: false),
                     CourseID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrollments", x => x.Id);
+                    table.PrimaryKey("PK_Enrollments", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Enrollments_Classes_ClassID",
                         column: x => x.ClassID,
@@ -73,7 +128,7 @@ namespace KimiNoGakko.Migrations
                         name: "FK_Enrollments_Courses_CourseID",
                         column: x => x.CourseID,
                         principalTable: "Courses",
-                        principalColumn: "EnrollmentID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -97,6 +152,11 @@ namespace KimiNoGakko.Migrations
                 table: "Enrollments",
                 column: "CourseID",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_ClassID",
+                table: "Students",
+                column: "ClassID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -105,7 +165,16 @@ namespace KimiNoGakko.Migrations
                 name: "Enrollments");
 
             migrationBuilder.DropTable(
+                name: "Students");
+
+            migrationBuilder.DropTable(
                 name: "Courses");
+
+            migrationBuilder.DropTable(
+                name: "Classes");
+
+            migrationBuilder.DropTable(
+                name: "Instructors");
 
             migrationBuilder.DropTable(
                 name: "Subjects");
