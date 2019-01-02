@@ -22,7 +22,8 @@ namespace KimiNoGakko.Controllers
             var schoolContext = _context.Enrollments
                     .Include(e => e.Course)
                     .Include(e => e.Class)
-                .AsNoTracking();
+                    .AsNoTracking();
+
             return View(await schoolContext.ToListAsync());
         }
 
@@ -38,6 +39,7 @@ namespace KimiNoGakko.Controllers
                 .Include(e => e.Class)
                 .Include(e => e.Course)
                 .SingleOrDefaultAsync(m => m.ID == id);
+
             if (enrollment == null)
             {
                 return NotFound();
@@ -59,7 +61,7 @@ namespace KimiNoGakko.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,ClassID,CourseID")] Enrollment enrollment)
+        public async Task<IActionResult> Create([Bind("ID,ClassID,CourseID,ShortDescription,LongDescription")] Enrollment enrollment)
         {
             if (ModelState.IsValid)
             {
