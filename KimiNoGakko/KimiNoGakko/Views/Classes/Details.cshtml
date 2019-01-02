@@ -21,10 +21,10 @@
                         @Html.DisplayFor(model => Model.Class.Year)
                     </dd>
                     <dt>
-                        @Html.DisplayNameFor(model => Model.Class.Name)
+                        @Html.DisplayNameFor(model => Model.Class.ClassID)
                     </dt>
                     <dd>
-                        @Html.DisplayFor(model => Model.Class.Name)
+                        @Html.DisplayFor(model => Model.Class.FullName)
                     </dd>
                     <dt>
                         Count
@@ -81,7 +81,7 @@
                         @foreach (var item in Model.Enrollments)
                         {
                             <tr>
-                                <th><a asp-controller="Enrollments" asp-action="Details" asp-route-id="@item.ID">@item.Course.Name</a></th>
+                                <th><a asp-controller="Enrollments" asp-action="Details" asp-route-id="@item.ID">@item.Course.FullName</a></th>
                                 <th class="text-center" style="text-align: right;">
                                     <a asp-controller="Enrollments" asp-action="Delete" asp-route-id="@item.ID"><i class="fas fa-sign-out-alt" style="color: red;"></i></a>
                                 </th>

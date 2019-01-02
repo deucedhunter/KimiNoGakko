@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using KimiNoGakko.Models;
+using KimiNoGakko.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using KimiNoGakko.Models;
 
 namespace KimiNoGakko.Controllers
 {
@@ -34,12 +32,28 @@ namespace KimiNoGakko.Controllers
 
             var instructor = await _context.Instructors
                 .SingleOrDefaultAsync(m => m.ID == id);
+
+
+
             if (instructor == null)
             {
                 return NotFound();
             }
 
-            return View(instructor);
+
+            var courses = _context.Courses.Where(c => c.InstructorID == instructor.ID).Include(c => c.Subject).Include(c => c.Enrollment).ToList();
+
+
+
+            var vm = new InstructorDetailsVM
+            {
+                Instructor = instructor,
+                Courses = courses
+
+                //
+            };
+
+            return View(vm);
         }
 
         // GET: Instructors/Create
