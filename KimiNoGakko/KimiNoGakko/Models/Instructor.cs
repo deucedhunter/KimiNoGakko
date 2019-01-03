@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KimiNoGakko.Models
@@ -9,5 +10,7 @@ namespace KimiNoGakko.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
 
         public DateTime HireDate { get; set; }
+
+        public IEnumerable<Presence> Presence { get; set; }
     }
 }

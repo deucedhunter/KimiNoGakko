@@ -33,9 +33,4 @@ namespace KimiNoGakko.Models
             }
         }
     }
-
-    public enum letters
-    {
-        A, B, C, D, E, F, G, H, I, J
-    }
 }

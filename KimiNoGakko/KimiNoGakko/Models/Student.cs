@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KimiNoGakko.Models
 {
@@ -9,6 +10,10 @@ namespace KimiNoGakko.Models
 
         public int ClassID { get; set; }
         public Class Class { get; set; }
+
+
+        public IEnumerable<Presence> Presence { get; set; }
+
 
     }
 }

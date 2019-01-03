@@ -11,8 +11,8 @@ using System;
 namespace KimiNoGakko.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20190102112745_ReverseMigration")]
-    partial class ReverseMigration
+    [Migration("20190102165557_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,7 +33,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasKey("ClassID");
 
-                    b.ToTable("Classes");
+                    b.ToTable("Class");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Course", b =>
@@ -41,9 +41,9 @@ namespace KimiNoGakko.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("InstructorID");
+                    b.Property<string>("FullName");
 
-                    b.Property<string>("Name");
+                    b.Property<int>("InstructorID");
 
                     b.Property<int>("SubjectID");
 
@@ -53,7 +53,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasIndex("SubjectID");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Enrollment", b =>
@@ -65,13 +65,19 @@ namespace KimiNoGakko.Migrations
 
                     b.Property<int>("CourseID");
 
+                    b.Property<string>("LongDescription")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("ShortDescription")
+                        .HasMaxLength(100);
+
                     b.HasKey("ID");
 
                     b.HasIndex("ClassID");
 
                     b.HasIndex("CourseID");
 
-                    b.ToTable("Enrollments");
+                    b.ToTable("Enrollment");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Instructor", b =>
@@ -96,7 +102,35 @@ namespace KimiNoGakko.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Instructors");
+                    b.ToTable("Instructor");
+                });
+
+            modelBuilder.Entity("KimiNoGakko.Models.Presence", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Data");
+
+                    b.Property<DateTime>("Godzina");
+
+                    b.Property<int>("InstructorId");
+
+                    b.Property<bool>("IsPresent");
+
+                    b.Property<int>("StudentId");
+
+                    b.Property<int>("SubjectId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("InstructorId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Presence");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Student", b =>
@@ -125,7 +159,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasIndex("ClassID");
 
-                    b.ToTable("Students");
+                    b.ToTable("Student");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Subject", b =>
@@ -139,7 +173,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasKey("SubjectID");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Course", b =>
@@ -165,6 +199,24 @@ namespace KimiNoGakko.Migrations
                     b.HasOne("KimiNoGakko.Models.Course", "Course")
                         .WithOne("Enrollment")
                         .HasForeignKey("KimiNoGakko.Models.Enrollment", "CourseID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("KimiNoGakko.Models.Presence", b =>
+                {
+                    b.HasOne("KimiNoGakko.Models.Instructor", "Instructor")
+                        .WithMany("Presence")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("KimiNoGakko.Models.Student", "Student")
+                        .WithMany("Presence")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("KimiNoGakko.Models.Subject", "Subject")
+                        .WithMany("Presence")
+                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -16,11 +16,20 @@ namespace KimiNoGakko.Models
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<Presence> Presence { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            modelBuilder.Entity<Student>().ToTable("Student");
+            modelBuilder.Entity<Instructor>().ToTable("Instructor");
+            modelBuilder.Entity<Class>().ToTable("Class");
+            modelBuilder.Entity<Subject>().ToTable("Subject");
+            modelBuilder.Entity<Course>().ToTable("Course");
+            modelBuilder.Entity<Enrollment>().ToTable("Enrollment");
+            modelBuilder.Entity<Presence>().ToTable("Presence");
 
             modelBuilder.Entity<Class>()
                 .HasMany(c => c.Students)

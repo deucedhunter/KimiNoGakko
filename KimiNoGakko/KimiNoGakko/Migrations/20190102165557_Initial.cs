@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace KimiNoGakko.Migrations
 {
-    public partial class Inital : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Classes",
+                name: "Class",
                 columns: table => new
                 {
                     ClassID = table.Column<int>(nullable: false)
@@ -20,11 +20,11 @@ namespace KimiNoGakko.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Classes", x => x.ClassID);
+                    table.PrimaryKey("PK_Class", x => x.ClassID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Instructors",
+                name: "Instructor",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -37,11 +37,11 @@ namespace KimiNoGakko.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Instructors", x => x.ID);
+                    table.PrimaryKey("PK_Instructor", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Subjects",
+                name: "Subject",
                 columns: table => new
                 {
                     SubjectID = table.Column<int>(nullable: false)
@@ -51,11 +51,11 @@ namespace KimiNoGakko.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subjects", x => x.SubjectID);
+                    table.PrimaryKey("PK_Subject", x => x.SubjectID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Students",
+                name: "Student",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -69,115 +69,169 @@ namespace KimiNoGakko.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Students", x => x.ID);
+                    table.PrimaryKey("PK_Student", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Students_Classes_ClassID",
+                        name: "FK_Student_Class_ClassID",
                         column: x => x.ClassID,
-                        principalTable: "Classes",
+                        principalTable: "Class",
                         principalColumn: "ClassID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Courses",
+                name: "Course",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EnrollmentID = table.Column<int>(nullable: false),
+                    FullName = table.Column<string>(nullable: true),
                     InstructorID = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
                     SubjectID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.ID);
+                    table.PrimaryKey("PK_Course", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Courses_Instructors_InstructorID",
+                        name: "FK_Course_Instructor_InstructorID",
                         column: x => x.InstructorID,
-                        principalTable: "Instructors",
+                        principalTable: "Instructor",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Courses_Subjects_SubjectID",
+                        name: "FK_Course_Subject_SubjectID",
                         column: x => x.SubjectID,
-                        principalTable: "Subjects",
+                        principalTable: "Subject",
                         principalColumn: "SubjectID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Enrollments",
+                name: "Presence",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Data = table.Column<DateTime>(nullable: false),
+                    Godzina = table.Column<DateTime>(nullable: false),
+                    InstructorId = table.Column<int>(nullable: false),
+                    IsPresent = table.Column<bool>(nullable: false),
+                    StudentId = table.Column<int>(nullable: false),
+                    SubjectId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Presence", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Presence_Instructor_InstructorId",
+                        column: x => x.InstructorId,
+                        principalTable: "Instructor",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Presence_Student_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Student",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Presence_Subject_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subject",
+                        principalColumn: "SubjectID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Enrollment",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClassID = table.Column<int>(nullable: false),
-                    CourseID = table.Column<int>(nullable: false)
+                    CourseID = table.Column<int>(nullable: false),
+                    LongDescription = table.Column<string>(maxLength: 500, nullable: true),
+                    ShortDescription = table.Column<string>(maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrollments", x => x.ID);
+                    table.PrimaryKey("PK_Enrollment", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Enrollments_Classes_ClassID",
+                        name: "FK_Enrollment_Class_ClassID",
                         column: x => x.ClassID,
-                        principalTable: "Classes",
+                        principalTable: "Class",
                         principalColumn: "ClassID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Enrollments_Courses_CourseID",
+                        name: "FK_Enrollment_Course_CourseID",
                         column: x => x.CourseID,
-                        principalTable: "Courses",
+                        principalTable: "Course",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_InstructorID",
-                table: "Courses",
+                name: "IX_Course_InstructorID",
+                table: "Course",
                 column: "InstructorID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_SubjectID",
-                table: "Courses",
+                name: "IX_Course_SubjectID",
+                table: "Course",
                 column: "SubjectID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_ClassID",
-                table: "Enrollments",
+                name: "IX_Enrollment_ClassID",
+                table: "Enrollment",
                 column: "ClassID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_CourseID",
-                table: "Enrollments",
-                column: "CourseID",
-                unique: true);
+                name: "IX_Enrollment_CourseID",
+                table: "Enrollment",
+                column: "CourseID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_ClassID",
-                table: "Students",
+                name: "IX_Presence_InstructorId",
+                table: "Presence",
+                column: "InstructorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Presence_StudentId",
+                table: "Presence",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Presence_SubjectId",
+                table: "Presence",
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Student_ClassID",
+                table: "Student",
                 column: "ClassID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Enrollments");
+                name: "Enrollment");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "Presence");
 
             migrationBuilder.DropTable(
-                name: "Courses");
+                name: "Course");
 
             migrationBuilder.DropTable(
-                name: "Classes");
+                name: "Student");
 
             migrationBuilder.DropTable(
-                name: "Instructors");
+                name: "Instructor");
 
             migrationBuilder.DropTable(
-                name: "Subjects");
+                name: "Subject");
+
+            migrationBuilder.DropTable(
+                name: "Class");
         }
     }
 }

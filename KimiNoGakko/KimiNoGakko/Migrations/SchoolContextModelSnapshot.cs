@@ -32,7 +32,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasKey("ClassID");
 
-                    b.ToTable("Classes");
+                    b.ToTable("Class");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Course", b =>
@@ -52,7 +52,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasIndex("SubjectID");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Enrollment", b =>
@@ -76,7 +76,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasIndex("CourseID");
 
-                    b.ToTable("Enrollments");
+                    b.ToTable("Enrollment");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Instructor", b =>
@@ -101,7 +101,35 @@ namespace KimiNoGakko.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Instructors");
+                    b.ToTable("Instructor");
+                });
+
+            modelBuilder.Entity("KimiNoGakko.Models.Presence", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CourseID");
+
+                    b.Property<DateTime>("Data");
+
+                    b.Property<DateTime>("Godzina");
+
+                    b.Property<int>("InstructorID");
+
+                    b.Property<bool>("IsPresent");
+
+                    b.Property<int>("StudentID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CourseID");
+
+                    b.HasIndex("InstructorID");
+
+                    b.HasIndex("StudentID");
+
+                    b.ToTable("Presence");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Student", b =>
@@ -130,7 +158,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasIndex("ClassID");
 
-                    b.ToTable("Students");
+                    b.ToTable("Student");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Subject", b =>
@@ -144,7 +172,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasKey("SubjectID");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Course", b =>
@@ -170,6 +198,24 @@ namespace KimiNoGakko.Migrations
                     b.HasOne("KimiNoGakko.Models.Course", "Course")
                         .WithOne("Enrollment")
                         .HasForeignKey("KimiNoGakko.Models.Enrollment", "CourseID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("KimiNoGakko.Models.Presence", b =>
+                {
+                    b.HasOne("KimiNoGakko.Models.Subject", "Course")
+                        .WithMany("Presence")
+                        .HasForeignKey("CourseID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("KimiNoGakko.Models.Instructor", "Instructor")
+                        .WithMany("Presence")
+                        .HasForeignKey("InstructorID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("KimiNoGakko.Models.Student", "Student")
+                        .WithMany("Presence")
+                        .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
