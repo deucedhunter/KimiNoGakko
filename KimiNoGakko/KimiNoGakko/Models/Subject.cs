@@ -12,6 +12,5 @@ namespace KimiNoGakko.Models
         public bool IsImportant { get; set; }
 
         public IEnumerable<Course> Courses { get; set; }
-        public IEnumerable<Presence> Presence { get; set; }
     }
 }

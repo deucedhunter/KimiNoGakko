@@ -19,7 +19,7 @@ namespace KimiNoGakko.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            var schoolContext = _context.Courses.Include(c => c.Instructor).Include(c => c.Subject);
+            var schoolContext = _context.Courses.Include(c => c.Employee).Include(c => c.Subject);
             return View(await schoolContext.ToListAsync());
         }
 
@@ -32,7 +32,7 @@ namespace KimiNoGakko.Controllers
             }
 
             var course = await _context.Courses
-                .Include(c => c.Instructor)
+                .Include(c => c.Employee)
                 .Include(c => c.Subject)
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (course == null)
@@ -46,7 +46,7 @@ namespace KimiNoGakko.Controllers
         // GET: Courses/Create
         public IActionResult Create()
         {
-            ViewData["InstructorItems"] = new SelectList(_context.Instructors, "ID", "FullName");
+            ViewData["EmployeeItems"] = new SelectList(_context.Employees, "ID", "FullName");
             ViewData["SubjectItems"] = new SelectList(_context.Subjects, "SubjectID", "Name");
             return View();
         }
@@ -56,10 +56,10 @@ namespace KimiNoGakko.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourseID,SubjectID,InstructorID,EnrollmentID")] Course course)
+        public async Task<IActionResult> Create([Bind("CourseID,SubjectID,EmployeeID,EnrollmentID")] Course course)
         {
 
-            var instructor = _context.Instructors.Single(x => x.ID == course.InstructorID);
+            var instructor = _context.Employees.Single(x => x.ID == course.EmployeeID);
             var subject = _context.Subjects.Single(x => x.SubjectID == course.SubjectID);
             if (ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace KimiNoGakko.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FirstMidName", course.InstructorID);
+            ViewData["EmployeeItems"] = new SelectList(_context.Employees, "ID", "FirstMidName", course.EmployeeID);
             ViewData["SubjectID"] = new SelectList(_context.Subjects, "SubjectID", "SubjectID", course.SubjectID);
             return View(course);
         }
@@ -82,14 +82,14 @@ namespace KimiNoGakko.Controllers
             }
 
             var course = await _context.Courses
-                .Include(x => x.Instructor)
+                .Include(x => x.Employee)
                 .Include(x => x.Subject)
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (course == null)
             {
                 return NotFound();
             }
-            ViewData["InstructorItems"] = new SelectList(_context.Instructors, "ID", "FullName", course.Instructor.FullName);
+            ViewData["EmployeeItems"] = new SelectList(_context.Employees, "ID", "FullName", course.Employee.FullName);
             ViewData["SubjectItems"] = new SelectList(_context.Subjects, "SubjectID", "Name", course.Subject.Name);
 
             return View(course);
@@ -107,7 +107,7 @@ namespace KimiNoGakko.Controllers
             {
                 try
                 {
-                    var isntructor = _context.Instructors.Find(course.InstructorID);
+                    var isntructor = _context.Employees.Find(course.EmployeeID);
                     var subject = _context.Subjects.Find(course.SubjectID);
                     //_context.Courses.Update(course);
                     course.FullName = "[" + subject.Name + "] " + isntructor.FullName;
@@ -127,7 +127,7 @@ namespace KimiNoGakko.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FirstMidName", course.InstructorID);
+            ViewData["EmployeeItems"] = new SelectList(_context.Employees, "ID", "FullName", course.EmployeeID);
             ViewData["SubjectID"] = new SelectList(_context.Subjects, "SubjectID", "SubjectID", course.SubjectID);
             return View(course);
         }
@@ -141,7 +141,7 @@ namespace KimiNoGakko.Controllers
             }
 
             var course = await _context.Courses
-                .Include(c => c.Instructor)
+                .Include(c => c.Employee)
                 .Include(c => c.Subject)
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (course == null)

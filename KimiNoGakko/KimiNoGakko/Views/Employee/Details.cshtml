@@ -1,4 +1,4 @@
-﻿@model InstructorDetailsVM
+﻿@model EmployeeDetailsVM
 
 @{
     ViewData["Title"] = "Details";
@@ -8,42 +8,42 @@
 
 <div class="row">
     <div class="col-md-4">
-        <h4>Instructor</h4>
+        <h4>Employee</h4>
         <hr />
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.Instructor.FirstMidName)
+                @Html.DisplayNameFor(model => model.Employee.FirstMidName)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Instructor.FirstMidName)
+                @Html.DisplayFor(model => model.Employee.FirstMidName)
             </dd>
             <dt>
-                @Html.DisplayNameFor(model => model.Instructor.LastName)
+                @Html.DisplayNameFor(model => model.Employee.LastName)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Instructor.LastName)
+                @Html.DisplayFor(model => model.Employee.LastName)
             </dd>
             <dt>
-                @Html.DisplayNameFor(model => model.Instructor.BirthDate)
+                @Html.DisplayNameFor(model => model.Employee.BirthDate)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Instructor.BirthDate)
+                @Html.DisplayFor(model => model.Employee.BirthDate)
             </dd>
             <dt>
-                @Html.DisplayNameFor(model => model.Instructor.Pesel)
+                @Html.DisplayNameFor(model => model.Employee.Pesel)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Instructor.Pesel)
+                @Html.DisplayFor(model => model.Employee.Pesel)
             </dd>
             <dt>
-                @Html.DisplayNameFor(model => model.Instructor.HireDate)
+                @Html.DisplayNameFor(model => model.Employee.HireDate)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Instructor.HireDate)
+                @Html.DisplayFor(model => model.Employee.HireDate)
             </dd>
         </dl>
         <div>
-            <a asp-action="Edit" asp-route-id="@Model.Instructor.ID">Edit</a> |
+            <a asp-action="Edit" asp-route-id="@Model.Employee.ID">Edit</a> |
             <a asp-action="Index">Back to List</a>
         </div>
     </div>

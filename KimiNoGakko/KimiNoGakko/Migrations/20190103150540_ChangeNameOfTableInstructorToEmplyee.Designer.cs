@@ -11,9 +11,10 @@ using System;
 namespace KimiNoGakko.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20190103150540_ChangeNameOfTableInstructorToEmplyee")]
+    partial class ChangeNameOfTableInstructorToEmplyee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,7 +164,7 @@ namespace KimiNoGakko.Migrations
 
                     b.Property<DateTime>("BirthDate");
 
-                    b.Property<int?>("ClassID");
+                    b.Property<int>("ClassID");
 
                     b.Property<string>("FirstMidName")
                         .IsRequired()
@@ -261,7 +262,8 @@ namespace KimiNoGakko.Migrations
                 {
                     b.HasOne("KimiNoGakko.Models.Class", "Class")
                         .WithMany("Students")
-                        .HasForeignKey("ClassID");
+                        .HasForeignKey("ClassID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

@@ -19,7 +19,7 @@ namespace KimiNoGakko.Controllers
         // GET: Presences
         public async Task<IActionResult> Index()
         {
-            var schoolContext = _context.Presence.Include(p => p.Course).Include(p => p.Instructor).Include(p => p.Student);
+            var schoolContext = _context.Presence.Include(p => p.Course).Include(p => p.Employee).Include(p => p.Student);
             return View(await schoolContext.ToListAsync());
         }
 
@@ -33,7 +33,7 @@ namespace KimiNoGakko.Controllers
 
             var presence = await _context.Presence
                 .Include(p => p.Course)
-                .Include(p => p.Instructor)
+                .Include(p => p.Employee)
                 .Include(p => p.Student)
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (presence == null)
@@ -48,7 +48,6 @@ namespace KimiNoGakko.Controllers
         public IActionResult Create()
         {
             ViewData["CourseID"] = new SelectList(_context.Courses, "ID", "FullName");
-            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName");
             ViewData["StudentID"] = new SelectList(_context.Students, "ID", "FullName");
             return View();
         }
@@ -58,16 +57,18 @@ namespace KimiNoGakko.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Data,Godzina,IsPresent,StudentID,InstructorID,CourseID")] Presence presence)
+        public async Task<IActionResult> Create([Bind("ID,Data,Godzina,IsPresent,StudentID,CourseID")] Presence presence)
         {
             if (ModelState.IsValid)
             {
+                Course course = _context.Courses.Single(x => x.ID == presence.CourseID);
+                Employee employee = _context.Employees.Single(x => x.ID == course.EmployeeID);
+                presence.EmployeeID = employee.ID;
                 _context.Add(presence);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CourseID"] = new SelectList(_context.Subjects, "ID", "FullName", presence.CourseID);
-            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", presence.InstructorID);
             ViewData["StudentID"] = new SelectList(_context.Students, "ID", "FullName", presence.StudentID);
             return View(presence);
         }
@@ -85,8 +86,7 @@ namespace KimiNoGakko.Controllers
             {
                 return NotFound();
             }
-            ViewData["CourseID"] = new SelectList(_context.Subjects, "ID", "FullName", presence.CourseID);
-            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", presence.InstructorID);
+            ViewData["CourseID"] = new SelectList(_context.Courses, "ID", "FullName", presence.CourseID);
             ViewData["StudentID"] = new SelectList(_context.Students, "ID", "FullName", presence.StudentID);
             return View(presence);
         }
@@ -96,7 +96,7 @@ namespace KimiNoGakko.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Data,Godzina,IsPresent,StudentID,InstructorID,CourseID")] Presence presence)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Data,Godzina,IsPresent,StudentID,CourseID")] Presence presence)
         {
             if (id != presence.ID)
             {
@@ -107,6 +107,9 @@ namespace KimiNoGakko.Controllers
             {
                 try
                 {
+                    Course course = _context.Courses.Single(x => x.ID == presence.CourseID);
+                    Employee employee = _context.Employees.Single(x => x.ID == course.EmployeeID);
+                    presence.EmployeeID = employee.ID;
                     _context.Update(presence);
                     await _context.SaveChangesAsync();
                 }
@@ -123,8 +126,7 @@ namespace KimiNoGakko.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseID"] = new SelectList(_context.Subjects, "ID", "FullName", presence.CourseID);
-            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", presence.InstructorID);
+            ViewData["CourseID"] = new SelectList(_context.Courses, "ID", "FullName", presence.CourseID);
             ViewData["StudentID"] = new SelectList(_context.Students, "ID", "FullName", presence.StudentID);
             return View(presence);
         }
@@ -139,7 +141,7 @@ namespace KimiNoGakko.Controllers
 
             var presence = await _context.Presence
                 .Include(p => p.Course)
-                .Include(p => p.Instructor)
+                .Include(p => p.Employee)
                 .Include(p => p.Student)
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (presence == null)

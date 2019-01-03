@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace KimiNoGakko.ViewModels
 {
-    public class InstructorDetailsVM
+    public class EmployeeDetailsVM
     {
-        public Instructor Instructor { get; set; }
+        public Employee Employee { get; set; }
         public List<Course> Courses { get; set; }
     }
 }

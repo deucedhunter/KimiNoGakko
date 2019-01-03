@@ -11,8 +11,8 @@ using System;
 namespace KimiNoGakko.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20190103093754_ChangePresenceModel")]
-    partial class ChangePresenceModel
+    [Migration("20190103150910_MakeClassNullable")]
+    partial class MakeClassNullable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,19 +41,44 @@ namespace KimiNoGakko.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FullName");
+                    b.Property<int>("EmployeeID");
 
-                    b.Property<int>("InstructorID");
+                    b.Property<string>("FullName");
 
                     b.Property<int>("SubjectID");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("InstructorID");
+                    b.HasIndex("EmployeeID");
 
                     b.HasIndex("SubjectID");
 
                     b.ToTable("Course");
+                });
+
+            modelBuilder.Entity("KimiNoGakko.Models.Employee", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("BirthDate");
+
+                    b.Property<string>("FirstMidName")
+                        .IsRequired()
+                        .HasMaxLength(60);
+
+                    b.Property<DateTime>("HireDate");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Pesel")
+                        .IsRequired();
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Enrollment", b =>
@@ -80,29 +105,28 @@ namespace KimiNoGakko.Migrations
                     b.ToTable("Enrollment");
                 });
 
-            modelBuilder.Entity("KimiNoGakko.Models.Instructor", b =>
+            modelBuilder.Entity("KimiNoGakko.Models.Grade", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("BirthDate");
+                    b.Property<int?>("CourseID");
 
-                    b.Property<string>("FirstMidName")
-                        .IsRequired()
-                        .HasMaxLength(60);
+                    b.Property<int?>("EmployeeID");
 
-                    b.Property<DateTime>("HireDate");
+                    b.Property<int?>("StudentID");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("Pesel")
-                        .IsRequired();
+                    b.Property<decimal>("Value");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Instructor");
+                    b.HasIndex("CourseID");
+
+                    b.HasIndex("EmployeeID");
+
+                    b.HasIndex("StudentID");
+
+                    b.ToTable("Grade");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Presence", b =>
@@ -110,13 +134,13 @@ namespace KimiNoGakko.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CourseID");
+                    b.Property<int?>("CourseID");
 
                     b.Property<DateTime>("Data");
 
-                    b.Property<DateTime>("Godzina");
+                    b.Property<int?>("EmployeeID");
 
-                    b.Property<int>("InstructorID");
+                    b.Property<DateTime>("Godzina");
 
                     b.Property<bool>("IsPresent");
 
@@ -126,7 +150,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasIndex("CourseID");
 
-                    b.HasIndex("InstructorID");
+                    b.HasIndex("EmployeeID");
 
                     b.HasIndex("StudentID");
 
@@ -140,7 +164,7 @@ namespace KimiNoGakko.Migrations
 
                     b.Property<DateTime>("BirthDate");
 
-                    b.Property<int>("ClassID");
+                    b.Property<int?>("ClassID");
 
                     b.Property<string>("FirstMidName")
                         .IsRequired()
@@ -178,9 +202,9 @@ namespace KimiNoGakko.Migrations
 
             modelBuilder.Entity("KimiNoGakko.Models.Course", b =>
                 {
-                    b.HasOne("KimiNoGakko.Models.Instructor", "Instructor")
+                    b.HasOne("KimiNoGakko.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("InstructorID")
+                        .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("KimiNoGakko.Models.Subject", "Subject")
@@ -202,17 +226,31 @@ namespace KimiNoGakko.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("KimiNoGakko.Models.Presence", b =>
+            modelBuilder.Entity("KimiNoGakko.Models.Grade", b =>
                 {
-                    b.HasOne("KimiNoGakko.Models.Subject", "Course")
-                        .WithMany("Presence")
-                        .HasForeignKey("CourseID")
+                    b.HasOne("KimiNoGakko.Models.Course", "Course")
+                        .WithMany("Grades")
+                        .HasForeignKey("CourseID");
+
+                    b.HasOne("KimiNoGakko.Models.Employee", "Employee")
+                        .WithMany("Grades")
+                        .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("KimiNoGakko.Models.Instructor", "Instructor")
+                    b.HasOne("KimiNoGakko.Models.Student", "Student")
+                        .WithMany("Grades")
+                        .HasForeignKey("StudentID");
+                });
+
+            modelBuilder.Entity("KimiNoGakko.Models.Presence", b =>
+                {
+                    b.HasOne("KimiNoGakko.Models.Course", "Course")
                         .WithMany("Presence")
-                        .HasForeignKey("InstructorID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CourseID");
+
+                    b.HasOne("KimiNoGakko.Models.Employee", "Employee")
+                        .WithMany("Presence")
+                        .HasForeignKey("EmployeeID");
 
                     b.HasOne("KimiNoGakko.Models.Student", "Student")
                         .WithMany("Presence")
@@ -224,8 +262,7 @@ namespace KimiNoGakko.Migrations
                 {
                     b.HasOne("KimiNoGakko.Models.Class", "Class")
                         .WithMany("Students")
-                        .HasForeignKey("ClassID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClassID");
                 });
 #pragma warning restore 612, 618
         }

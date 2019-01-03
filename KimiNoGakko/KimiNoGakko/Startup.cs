@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using KimiNoGakko.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using KimiNoGakko.Models;
+using System.Globalization;
 
 namespace KimiNoGakko
 {
@@ -27,6 +24,8 @@ namespace KimiNoGakko
 
             services.AddDbContext<SchoolContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SchoolContext")));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +49,10 @@ namespace KimiNoGakko
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            var cultureInfo = new CultureInfo("en-US");
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
     }
 }

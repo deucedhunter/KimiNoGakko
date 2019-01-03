@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KimiNoGakko.Models
 {
-    public class Instructor : Person
+    public class Employee : Person
     {
         [DataType(DataType.Date), Display(Name = "Data Zatrudnienia")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -12,5 +12,6 @@ namespace KimiNoGakko.Models
         public DateTime HireDate { get; set; }
 
         public IEnumerable<Presence> Presence { get; set; }
+        public IEnumerable<Grade> Grades { get; set; }
     }
 }

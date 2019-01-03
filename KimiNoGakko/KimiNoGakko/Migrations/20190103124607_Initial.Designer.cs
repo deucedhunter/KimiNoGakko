@@ -11,9 +11,10 @@ using System;
 namespace KimiNoGakko.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20190103124607_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,44 +41,19 @@ namespace KimiNoGakko.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("EmployeeID");
-
                     b.Property<string>("FullName");
+
+                    b.Property<int>("InstructorID");
 
                     b.Property<int>("SubjectID");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("EmployeeID");
+                    b.HasIndex("InstructorID");
 
                     b.HasIndex("SubjectID");
 
                     b.ToTable("Course");
-                });
-
-            modelBuilder.Entity("KimiNoGakko.Models.Employee", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("BirthDate");
-
-                    b.Property<string>("FirstMidName")
-                        .IsRequired()
-                        .HasMaxLength(60);
-
-                    b.Property<DateTime>("HireDate");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("Pesel")
-                        .IsRequired();
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Enrollment", b =>
@@ -111,7 +87,7 @@ namespace KimiNoGakko.Migrations
 
                     b.Property<int?>("CourseID");
 
-                    b.Property<int?>("EmployeeID");
+                    b.Property<int?>("InstructorID");
 
                     b.Property<int?>("StudentID");
 
@@ -121,11 +97,36 @@ namespace KimiNoGakko.Migrations
 
                     b.HasIndex("CourseID");
 
-                    b.HasIndex("EmployeeID");
+                    b.HasIndex("InstructorID");
 
                     b.HasIndex("StudentID");
 
                     b.ToTable("Grade");
+                });
+
+            modelBuilder.Entity("KimiNoGakko.Models.Instructor", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("BirthDate");
+
+                    b.Property<string>("FirstMidName")
+                        .IsRequired()
+                        .HasMaxLength(60);
+
+                    b.Property<DateTime>("HireDate");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Pesel")
+                        .IsRequired();
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Instructor");
                 });
 
             modelBuilder.Entity("KimiNoGakko.Models.Presence", b =>
@@ -137,9 +138,9 @@ namespace KimiNoGakko.Migrations
 
                     b.Property<DateTime>("Data");
 
-                    b.Property<int?>("EmployeeID");
-
                     b.Property<DateTime>("Godzina");
+
+                    b.Property<int?>("InstructorID");
 
                     b.Property<bool>("IsPresent");
 
@@ -149,7 +150,7 @@ namespace KimiNoGakko.Migrations
 
                     b.HasIndex("CourseID");
 
-                    b.HasIndex("EmployeeID");
+                    b.HasIndex("InstructorID");
 
                     b.HasIndex("StudentID");
 
@@ -163,7 +164,7 @@ namespace KimiNoGakko.Migrations
 
                     b.Property<DateTime>("BirthDate");
 
-                    b.Property<int?>("ClassID");
+                    b.Property<int>("ClassID");
 
                     b.Property<string>("FirstMidName")
                         .IsRequired()
@@ -201,9 +202,9 @@ namespace KimiNoGakko.Migrations
 
             modelBuilder.Entity("KimiNoGakko.Models.Course", b =>
                 {
-                    b.HasOne("KimiNoGakko.Models.Employee", "Employee")
+                    b.HasOne("KimiNoGakko.Models.Instructor", "Instructor")
                         .WithMany()
-                        .HasForeignKey("EmployeeID")
+                        .HasForeignKey("InstructorID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("KimiNoGakko.Models.Subject", "Subject")
@@ -231,9 +232,9 @@ namespace KimiNoGakko.Migrations
                         .WithMany("Grades")
                         .HasForeignKey("CourseID");
 
-                    b.HasOne("KimiNoGakko.Models.Employee", "Employee")
+                    b.HasOne("KimiNoGakko.Models.Instructor", "Instructor")
                         .WithMany("Grades")
-                        .HasForeignKey("EmployeeID")
+                        .HasForeignKey("InstructorID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("KimiNoGakko.Models.Student", "Student")
@@ -247,9 +248,9 @@ namespace KimiNoGakko.Migrations
                         .WithMany("Presence")
                         .HasForeignKey("CourseID");
 
-                    b.HasOne("KimiNoGakko.Models.Employee", "Employee")
+                    b.HasOne("KimiNoGakko.Models.Instructor", "Instructor")
                         .WithMany("Presence")
-                        .HasForeignKey("EmployeeID");
+                        .HasForeignKey("InstructorID");
 
                     b.HasOne("KimiNoGakko.Models.Student", "Student")
                         .WithMany("Presence")
@@ -261,7 +262,8 @@ namespace KimiNoGakko.Migrations
                 {
                     b.HasOne("KimiNoGakko.Models.Class", "Class")
                         .WithMany("Students")
-                        .HasForeignKey("ClassID");
+                        .HasForeignKey("ClassID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

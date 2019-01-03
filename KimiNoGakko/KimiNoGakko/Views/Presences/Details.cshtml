@@ -32,19 +32,19 @@
             @Html.DisplayNameFor(model => model.Course)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Course.SubjectID)
+            @Html.DisplayFor(model => model.Course.FullName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Instructor)
+            @Html.DisplayNameFor(model => model.Employee)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Instructor.FirstMidName)
+            @Html.DisplayFor(model => model.Employee.FullName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Student)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Student.FirstMidName)
+            @Html.DisplayFor(model => model.Student.FullName)
         </dd>
     </dl>
 </div>

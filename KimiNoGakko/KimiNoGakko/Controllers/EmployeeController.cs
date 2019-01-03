@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace KimiNoGakko.Controllers
 {
-    public class InstructorsController : Controller
+    public class EmployeeController : Controller
     {
         private readonly SchoolContext _context;
 
-        public InstructorsController(SchoolContext context)
+        public EmployeeController(SchoolContext context)
         {
             _context = context;
         }
@@ -19,7 +19,7 @@ namespace KimiNoGakko.Controllers
         // GET: Instructors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Instructors.ToListAsync());
+            return View(await _context.Employees.ToListAsync());
         }
 
         // GET: Instructors/Details/5
@@ -30,27 +30,29 @@ namespace KimiNoGakko.Controllers
                 return NotFound();
             }
 
-            var instructor = await _context.Instructors
+            var employee = await _context.Employees
                 .SingleOrDefaultAsync(m => m.ID == id);
 
 
 
-            if (instructor == null)
+            if (employee == null)
             {
                 return NotFound();
             }
 
 
-            var courses = _context.Courses.Where(c => c.InstructorID == instructor.ID).Include(c => c.Subject).Include(c => c.Enrollment).ToList();
+            var courses = _context.Courses
+                .Where(c => c.EmployeeID == employee.ID)
+                .Include(c => c.Subject)
+                .Include(c => c.Enrollment)
+                .ToList();
 
 
 
-            var vm = new InstructorDetailsVM
+            var vm = new EmployeeDetailsVM
             {
-                Instructor = instructor,
+                Employee = employee,
                 Courses = courses
-
-                //
             };
 
             return View(vm);
@@ -67,7 +69,7 @@ namespace KimiNoGakko.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("HireDate,ID,FirstMidName,LastName,BirthDate,Pesel")] Instructor instructor)
+        public async Task<IActionResult> Create([Bind("HireDate,ID,FirstMidName,LastName,BirthDate,Pesel")] Employee instructor)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +88,7 @@ namespace KimiNoGakko.Controllers
                 return NotFound();
             }
 
-            var instructor = await _context.Instructors.SingleOrDefaultAsync(m => m.ID == id);
+            var instructor = await _context.Employees.SingleOrDefaultAsync(m => m.ID == id);
             if (instructor == null)
             {
                 return NotFound();
@@ -99,9 +101,9 @@ namespace KimiNoGakko.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("HireDate,ID,FirstMidName,LastName,BirthDate,Pesel")] Instructor instructor)
+        public async Task<IActionResult> Edit(int id, [Bind("HireDate,ID,FirstMidName,LastName,BirthDate,Pesel")] Employee employee)
         {
-            if (id != instructor.ID)
+            if (id != employee.ID)
             {
                 return NotFound();
             }
@@ -110,12 +112,12 @@ namespace KimiNoGakko.Controllers
             {
                 try
                 {
-                    _context.Update(instructor);
+                    _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InstructorExists(instructor.ID))
+                    if (!EmployeeExists(employee.ID))
                     {
                         return NotFound();
                     }
@@ -126,7 +128,7 @@ namespace KimiNoGakko.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(instructor);
+            return View(employee);
         }
 
         // GET: Instructors/Delete/5
@@ -137,7 +139,7 @@ namespace KimiNoGakko.Controllers
                 return NotFound();
             }
 
-            var instructor = await _context.Instructors
+            var instructor = await _context.Employees
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (instructor == null)
             {
@@ -152,15 +154,15 @@ namespace KimiNoGakko.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var instructor = await _context.Instructors.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Instructors.Remove(instructor);
+            var instructor = await _context.Employees.SingleOrDefaultAsync(m => m.ID == id);
+            _context.Employees.Remove(instructor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InstructorExists(int id)
+        private bool EmployeeExists(int id)
         {
-            return _context.Instructors.Any(e => e.ID == id);
+            return _context.Employees.Any(e => e.ID == id);
         }
     }
 }

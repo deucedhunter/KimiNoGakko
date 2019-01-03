@@ -106,42 +106,6 @@ namespace KimiNoGakko.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Presence",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Data = table.Column<DateTime>(nullable: false),
-                    Godzina = table.Column<DateTime>(nullable: false),
-                    InstructorId = table.Column<int>(nullable: false),
-                    IsPresent = table.Column<bool>(nullable: false),
-                    StudentId = table.Column<int>(nullable: false),
-                    SubjectId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Presence", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Presence_Instructor_InstructorId",
-                        column: x => x.InstructorId,
-                        principalTable: "Instructor",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Presence_Student_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Student",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Presence_Subject_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subject",
-                        principalColumn: "SubjectID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Enrollment",
                 columns: table => new
                 {
@@ -169,6 +133,76 @@ namespace KimiNoGakko.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Grade",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CourseID = table.Column<int>(nullable: true),
+                    InstructorID = table.Column<int>(nullable: true),
+                    StudentID = table.Column<int>(nullable: true),
+                    Value = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Grade", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Grade_Course_CourseID",
+                        column: x => x.CourseID,
+                        principalTable: "Course",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Grade_Instructor_InstructorID",
+                        column: x => x.InstructorID,
+                        principalTable: "Instructor",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Grade_Student_StudentID",
+                        column: x => x.StudentID,
+                        principalTable: "Student",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Presence",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CourseID = table.Column<int>(nullable: true),
+                    Data = table.Column<DateTime>(nullable: false),
+                    Godzina = table.Column<DateTime>(nullable: false),
+                    InstructorID = table.Column<int>(nullable: true),
+                    IsPresent = table.Column<bool>(nullable: false),
+                    StudentID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Presence", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Presence_Course_CourseID",
+                        column: x => x.CourseID,
+                        principalTable: "Course",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Presence_Instructor_InstructorID",
+                        column: x => x.InstructorID,
+                        principalTable: "Instructor",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Presence_Student_StudentID",
+                        column: x => x.StudentID,
+                        principalTable: "Student",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Course_InstructorID",
                 table: "Course",
@@ -190,19 +224,34 @@ namespace KimiNoGakko.Migrations
                 column: "CourseID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Presence_InstructorId",
-                table: "Presence",
-                column: "InstructorId");
+                name: "IX_Grade_CourseID",
+                table: "Grade",
+                column: "CourseID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Presence_StudentId",
-                table: "Presence",
-                column: "StudentId");
+                name: "IX_Grade_InstructorID",
+                table: "Grade",
+                column: "InstructorID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Presence_SubjectId",
+                name: "IX_Grade_StudentID",
+                table: "Grade",
+                column: "StudentID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Presence_CourseID",
                 table: "Presence",
-                column: "SubjectId");
+                column: "CourseID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Presence_InstructorID",
+                table: "Presence",
+                column: "InstructorID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Presence_StudentID",
+                table: "Presence",
+                column: "StudentID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Student_ClassID",
@@ -214,6 +263,9 @@ namespace KimiNoGakko.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Enrollment");
+
+            migrationBuilder.DropTable(
+                name: "Grade");
 
             migrationBuilder.DropTable(
                 name: "Presence");
