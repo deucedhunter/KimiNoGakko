@@ -1,12 +1,12 @@
 ﻿@model KimiNoGakko.Models.Subject
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Utwórz";
 }
 
-<h2>Create</h2>
+<h2>@ViewData["Title"]</h2>
 
-<h4>Subject</h4>
+<h4>Przedmiot</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -20,20 +20,18 @@
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input asp-for="IsImportant" /> @Html.DisplayNameFor(model => model.IsImportant)
+                        <input asp-for="IsImportant" /> Wlicza się do średniej
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Utwórz" class="btn btn-primary" /> |
+                <a asp-action="Index">Wróć do listy</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

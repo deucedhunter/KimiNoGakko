@@ -1,14 +1,14 @@
 ﻿@model EmployeeDetailsVM
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły";
 }
 
-<h2>Details</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div class="row">
     <div class="col-md-4">
-        <h4>Employee</h4>
+        <h4>Pracownik</h4>
         <hr />
         <dl class="dl-horizontal">
             <dt>
@@ -43,8 +43,8 @@
             </dd>
         </dl>
         <div>
-            <a asp-action="Edit" asp-route-id="@Model.Employee.ID">Edit</a> |
-            <a asp-action="Index">Back to List</a>
+            <a asp-action="Edit" asp-route-id="@Model.Employee.ID">Edytuj</a> |
+            <a asp-action="Index">Wróć do listy</a>
         </div>
     </div>
     <div class="col-md-6">

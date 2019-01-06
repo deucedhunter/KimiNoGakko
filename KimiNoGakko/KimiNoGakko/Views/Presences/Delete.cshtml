@@ -1,14 +1,14 @@
 ﻿@model KimiNoGakko.Models.Presence
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Usuń";
 }
 
-<h2>Delete</h2>
+<h2>@ViewData["Title"]</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Czy jesteś pewny, że chcesz usunąć obecnosć?</h3>
 <div>
-    <h4>Presence</h4>
+    <h4>Obecnosć</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -30,12 +30,6 @@
             @Html.DisplayFor(model => model.Course.FullName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Employee)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Employee.FullName)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Student)
         </dt>
         <dd>
@@ -51,7 +45,7 @@
 
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Usuń" class="btn btn-primary" /> |
+        <a asp-action="Index">Wróć do listy</a>
     </form>
 </div>

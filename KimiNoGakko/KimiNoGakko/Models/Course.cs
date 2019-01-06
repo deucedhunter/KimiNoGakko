@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KimiNoGakko.Models
 {
@@ -6,7 +7,7 @@ namespace KimiNoGakko.Models
     {
         public int ID { get; set; }
 
-
+        [Display(Name = "Kurs")]
         public string FullName { get; set; }
 
         public int SubjectID { get; set; }

@@ -1,25 +1,22 @@
 ﻿@model IEnumerable<KimiNoGakko.Models.Grade>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista";
 }
 
-<h2>Index</h2>
+<h2>@ViewData["Title"]</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Nowa ocena</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Student)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Course)
+                @Html.DisplayNameFor(model => model.Course.FullName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Value)
@@ -32,9 +29,6 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Employee.FullName)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Student.FullName)
                 </td>
                 <td>
@@ -44,9 +38,9 @@
                     @String.Format("{0:N1}", item.Value)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edytuj</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Szczegóły</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Usuń</a>
                 </td>
             </tr>
         }

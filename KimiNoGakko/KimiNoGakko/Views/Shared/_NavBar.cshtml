@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-inverse navbar-fixed-top">
+﻿<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -19,6 +19,17 @@
                 <li><a asp-area="" asp-controller="Enrollments" asp-action="Index">Zapisy</a></li>
                 <li><a asp-area="" asp-controller="Presences" asp-action="Index">Obecności</a></li>
                 <li><a asp-area="" asp-controller="Grades" asp-action="Index">Oceny</a></li>
+            </ul>
+            <ul class="nav navbar-nav pull-right navbar-collapse collapse">
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <li><a asp-controller="Home" asp-action="Login">Zaloguj</a></li>
+                    <li><a asp-controller="Home" asp-action="Register">Zarejestruj</a></li>
+                }
+                else
+                {
+                    <li><a asp-controller="Home" asp-action="Logout">Wyloguj</a></li>
+                }
             </ul>
         </div>
     </div>

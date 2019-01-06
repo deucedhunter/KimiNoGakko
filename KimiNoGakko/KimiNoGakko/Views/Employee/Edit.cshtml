@@ -1,12 +1,12 @@
 ﻿@model KimiNoGakko.Models.Employee
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edytuj";
 }
 
-<h2>Edit</h2>
+<h2>@ViewData["Title"]</h2>
 
-<h4>Employee</h4>
+<h4>Pracownik</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -39,14 +39,12 @@
                 <span asp-validation-for="HireDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Zapisz" class="btn btn-primary" /> |
+
+                <a asp-action="Index">Wróć do listy</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

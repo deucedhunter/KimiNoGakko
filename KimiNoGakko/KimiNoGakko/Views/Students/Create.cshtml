@@ -1,12 +1,12 @@
 ﻿@model StudentClassVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Utwórz";
 }
 
-<h2>Create</h2>
+<h2>@ViewData["Title"]</h2>
 
-<h4>Student</h4>
+<h4>Uczeń</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -25,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Student.BirthDate" class="control-label"></label>
-                <input asp-for="Student.BirthDate" class="form-control" />
+                <input asp-for="Student.BirthDate" type="date" value="1900-01-01" asp-format="{0:dd-MM-yyyy}" class="form-control" />
                 <span asp-validation-for="Student.BirthDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -39,19 +39,18 @@
                 <span asp-validation-for="Student.GudrdianPhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
+
+                <label class="control-label">Klasa</label>
                 @Html.DropDownListFor(x => x.Student.ClassID,
-                    new SelectList(Model.Classes, "ClassID", "FullName"), "Wybierz", new { @class = "form-control"}
+                    new SelectList(Model.Classes, "ClassID", "FullName"), "Wybierz", new {@class = "form-control"}
                     )
             </div>
             <div class=" form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Utwórz" class="btn btn-primary" /> |
+                <a asp-action="Index">Wróć do listy</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

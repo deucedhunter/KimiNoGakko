@@ -8,6 +8,7 @@ namespace KimiNoGakko.Models
         public int ID { get; set; }
 
         [Range(2.0, 5.0), RegularExpression(@"^\d+\.\d{0,1}$")]
+        [Display(Name = "Ocena")]
         public decimal Value { get; set; }
 
         [ForeignKey("StudentID")]

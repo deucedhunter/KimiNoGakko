@@ -1,0 +1,32 @@
+﻿@model KimiNoGakko.Controllers.LoginViewModel
+<h2>Logowanie</h2>
+
+<h4>Uzyj swoich danych logowania</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Login" method="post" class="">
+            <div class="form-group form-inline">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username"></span>
+            </div>
+            <div class="form-group form-inline">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div class="form-group form-inline">
+                <input type="checkbox" class="form-control" />
+                <label class="control-label">Pamiętaj mnie?</label>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Wyślij" class="btn btn-primary" />
+            </div>
+        </form>
+        <p><a href="#">Zapomniałeś swoich danych logowania?</a></p>
+        <p><a href="#">Nie masz jeszcze założonego konta?</a></p>
+    </div>
+</div>
